@@ -26,6 +26,7 @@ Imports:
     tidyr,
     rlang,
     units,
+    ggplot2,
     ggrepel,
     viridis,
     ggpubr

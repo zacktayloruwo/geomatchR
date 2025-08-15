@@ -18,7 +18,7 @@
 #' @returns Returns a plot object
 #' @importFrom rlang sym
 #' @import dplyr
-#' @importFrom ggplot2 ggplot geom_sf aes labs theme_bw
+#' @import ggplot2
 #' @import sf
 #' @import ggrepel
 #' @import viridis
@@ -106,24 +106,24 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
 
     lim = min(g$similarity_area)
 
-    p <- ggplot() +
-      geom_sf(data = g, aes(fill = similarity_area), colour = "#000000", lwd = lwd) +
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = g, ggplot2::aes(fill = similarity_area), colour = "#000000", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      labs(title = "Similarity scores, forward matching",
+      ggplot2::labs(title = "Similarity scores, forward matching",
            x = "", y = "") +
-      theme_bw()
+      ggplot2::theme_bw()
 
     #ggtitle(paste("(b) geomatchR backward match score\n", geo, y2, sprintf('\u2192'), y1, sep = " "))
 
 
     if (labels %in% c("id", "name")) {
 
-      p <- p + ggrepel::geom_label_repel(aes(label = paste0(!!rlang::sym(labels), "\n", round(.data$similarity_area,2)), geometry = .data$geometry),
+      p <- p + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(.data$similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
                                          data = sf::st_centroid(g |> dplyr::filter(.data$similarity_area < label.cutoff))) +
-        labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
     }
 
     return(p)
@@ -148,21 +148,21 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
 
     lim = min(g$similarity_area)
 
-    p <- ggplot() +
-      geom_sf(data = g, aes(fill = .data$similarity_area), colour = "#000000", lwd = lwd) +
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = g, ggplot2::aes(fill = .data$similarity_area), colour = "#000000", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      labs(title = "Similarity scores, backward matching",
+      ggplot2::labs(title = "Similarity scores, backward matching",
            x = "", y = "") +
-      theme_bw()
+      ggplot2::theme_bw()
 
     if (labels %in% c("id", "name")) {
 
-      p <- p + ggrepel::geom_label_repel(aes(label = paste0(!!rlang::sym(labels), "\n", round(.data$similarity_area,2)), geometry = .data$geometry),
+      p <- p + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(.data$similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
                                          data = sf::st_centroid(g |> dplyr::filter(.data$similarity_area < label.cutoff))) +
-        labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
     }
 
     return(p)
@@ -187,35 +187,35 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
 
     lim = min(c(min(geom_1$similarity_area), min(geom_2$similarity_area)))
 
-    p1 <- ggplot() +
-      geom_sf(data = geom_2, fill = NA, color = NA) +
-      geom_sf(data = geom_1, aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
+    p1 <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = geom_2, fill = NA, color = NA) +
+      ggplot2::geom_sf(data = geom_1, ggplot2::aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      labs(title = "Similarity scores, forward matching", x = "", y = "") +
-      theme_bw()
+      ggplot2::labs(title = "Similarity scores, forward matching", x = "", y = "") +
+      ggplot2::theme_bw()
 
-    p2 <- ggplot() +
-      geom_sf(data = geom_1, fill = NA, color = NA) +
-      geom_sf(data = geom_2, aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
+    p2 <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = geom_1, fill = NA, color = NA) +
+      ggplot2::geom_sf(data = geom_2, ggplot2::aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      labs(title = "Similarity scores, backward matching", x = "", y = "") +
-      theme_bw()
+      ggplot2::labs(title = "Similarity scores, backward matching", x = "", y = "") +
+      ggplot2::theme_bw()
 
     if (labels %in% c("id", "name")) {
 
-      p1 <- p1 + ggrepel::geom_label_repel(aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
+      p1 <- p1 + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
                                            size = s, color = "red", stat = "sf_coordinates",
                                            min.segment.length = 0, segment.color = "red",
                                            max.overlaps = Inf, alpha = a, seed = 519, force = f,
                                            data = sf::st_centroid(geom_1 |> dplyr::filter(.data$similarity_area >= label.cutoff))) +
-        labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
 
-      p2 <- p2 + ggrepel::geom_label_repel(aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
+      p2 <- p2 + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
                                          data = sf::st_centroid(geom_2 |> dplyr::filter(.data$similarity_area >= label.cutoff))) +
-        labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
     }
 
     p <- ggpubr::ggarrange(p1, p2, ncol = 1, legend = "bottom", common.legend = TRUE, align ="hv")

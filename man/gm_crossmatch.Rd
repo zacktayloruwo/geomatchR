@@ -33,9 +33,10 @@ Returns a list of tables:
   }
 }
 \description{
-`gm_crossmatch()` tests if all elements in the sf object are polygons and recasts
-   them as MULTYPOLYGONs if necessary; validates the polygons; and reprojects
-   the polygons to EPSG 6933, Global Equal Area.
+`gm_crossmatch()` compares polygon sf objects geom1 and geom2 and returns a list
+   of tables that help the user assess which polygons are high-probability matches.
+   The returned list can be used to cartographically visualize similarity scores using
+   the `gm_map_similarity()` function.
 }
 \examples{
 library(sf)

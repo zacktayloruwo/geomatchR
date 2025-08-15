@@ -1,0 +1,20 @@
+Package: geomatchR
+Type: Package
+Title: Compare Two Polygon Sets for Similarity
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Zack", "Taylor",
+      email = "zack.taylor@uwo.ca",
+      role = c("aut", "cre")
+    ),
+    person(
+      "Christopher", "Hewitt",
+      email = "chewitt4@uwo.ca",
+      role = "aut"
+    )
+  )
+Description: geomatchR compares two polygon sets and returns probabilities of individual polygons representing the same real-world feature.
+License: CC BY 4.0
+Encoding: UTF-8
+LazyData: true

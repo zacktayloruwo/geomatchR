@@ -18,3 +18,14 @@ Description: geomatchR compares two polygon sets and returns probabilities of in
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.3.2
+Imports:
+    sf,
+    tibble,
+    dplyr,
+    tidyr,
+    rlang,
+    units,
+    ggrepel,
+    viridis,
+    ggpubr

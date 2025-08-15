@@ -30,3 +30,5 @@ Imports:
     ggrepel,
     viridis,
     ggpubr
+URL: https://github.com/zacktayloruwo/geomatchR
+BugReports: https://github.com/zacktayloruwo/geomatchR/issues

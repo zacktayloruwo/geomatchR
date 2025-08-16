@@ -1,4 +1,4 @@
-#' Visually represent a polygon's matches
+#' Visually represent a single polygon's matches
 #'
 #' `gm_map_matches()` creates a map of all matches to a single specified polygon.
 #'
@@ -11,7 +11,7 @@
 #' @param name2 The unique polygon identification name of the second polygon sf object
 #' @param table An object of class list created by `gm_crossmatch()`
 #' @param context If TRUE, draws the boundaries of the first polygon sf object as background visual reference
-#' @returns Returns a plot object
+#' @returns Returns a ggplot object
 #' @importFrom rlang sym
 #' @import dplyr
 #' @import ggplot2
@@ -57,7 +57,7 @@
 #'   clean = TRUE
 #' )
 #'
-#' # map similarity
+#' # map matches of polygon 'A1'
 #' gm_map_matches(
 #'   polygon = "A1",
 #'   geom1 = sf1,

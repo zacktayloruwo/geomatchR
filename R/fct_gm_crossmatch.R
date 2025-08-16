@@ -3,7 +3,7 @@
 #' `gm_crossmatch()` compares polygon sf objects geom1 and geom2 and returns a list
 #'    of tables that help the user assess which polygons are high-probability matches.
 #'    The returned list can be used to cartographically visualize similarity scores using
-#'    the `gm_map_similarity()` function.
+#'    the `gm_map_similarity()` and `gm_map_matches()` functions.
 #'
 #' @param geom1 The first polygon sf object
 #' @param geom2 The second polygon sf object

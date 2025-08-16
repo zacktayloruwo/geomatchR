@@ -1,2 +1,7 @@
 
 exportPattern("^[[:alpha:]]+")
+export(gm_map_matches)
+export(gm_map_similarity)
+export(gm_crossmatch)
+export(gm_clean)
+

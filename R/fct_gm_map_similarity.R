@@ -88,6 +88,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
   # declare variables
   id <- similarity_area <- NULL
 
+  # plot = c("forward", "f")
   if (plot %in% c("forward", "f")) {
 
     g <- geom1 |>
@@ -97,7 +98,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                          dplyr::select(id1, similarity_area),
                 by = dplyr::join_by(id == id1))
 
-    # if name does not exist
+    # if name does not exist, make identical to id
     if (!is.na(name1)) { g <- g |> dplyr::rename(name = !!rlang::sym(name1))}
     if (is.na(name1)) { g <- g |> dplyr::mutate(name = .data$id) }
 
@@ -113,9 +114,6 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
            x = "", y = "") +
       ggplot2::theme_bw()
 
-    #ggtitle(paste("(b) geomatchR backward match score\n", geo, y2, sprintf('\u2192'), y1, sep = " "))
-
-
     if (labels %in% c("id", "name")) {
 
       p <- p + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(.data$similarity_area,2)), geometry = .data$geometry),
@@ -130,6 +128,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
 
   }
 
+  # plot = c("backward", "b")
   if (plot %in% c("backward", "b")) {
 
     g <- geom2 |>
@@ -169,6 +168,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
 
   }
 
+  # plot = c("combined", "c")
   if (plot %in% c("combined", "c")) {
 
     geom_1 <- geom1 |> dplyr::rename(id = !!rlang::sym(id1)) |> dplyr::left_join(table[['similarity']] |> dplyr::filter(.data$rank_areal_f == 1) |> dplyr::select(id1, similarity_area), by = dplyr::join_by(id == id1))

@@ -115,16 +115,12 @@ gm_crossmatch <- function(geom1, geom2, id1, id2, name1, name2, cutoff = .8, cle
     }
   }
 
-  # Clean polygons safely
-  if (clean) {
-    if (exists("gm_clean", mode = "function")) {
-      message("** Cleaning ", deparse(substitute(geom1)))
-      geom1 <- gm_clean(geom1)
-      message("** Cleaning ", deparse(substitute(geom2)))
-      geom2 <- gm_clean(geom2)
-    } else {
-      warning("gm_clean() not found. Skipping cleaning step.")
-    }
+  # check if id and name columns exist in the datasets
+  if (!rlang::has_name(geom1, id1)) {
+    stop(paste0("Column ", id1, " does not exist in geom1"))
+  }
+  if (!rlang::has_name(geom2, id2)) {
+    stop(paste0("Column ", id2, " does not exist in geom2"))
   }
 
   # rename id and name columns

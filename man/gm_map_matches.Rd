@@ -2,7 +2,7 @@
 % Please edit documentation in R/fct_gm_map_matches.R
 \name{gm_map_matches}
 \alias{gm_map_matches}
-\title{Visually represent a polygon's matches}
+\title{Visually represent a single polygon's matches}
 \usage{
 gm_map_matches(
   polygon,
@@ -36,7 +36,7 @@ gm_map_matches(
 \item{context}{If TRUE, draws the boundaries of the first polygon sf object as background visual reference}
 }
 \value{
-Returns a plot object
+Returns a ggplot object
 }
 \description{
 `gm_map_matches()` creates a map of all matches to a single specified polygon.
@@ -78,7 +78,7 @@ result <- gm_crossmatch(
   clean = TRUE
 )
 
-# map similarity
+# map matches of polygon 'A1'
 gm_map_matches(
   polygon = "A1",
   geom1 = sf1,

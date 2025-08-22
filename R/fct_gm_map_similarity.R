@@ -120,7 +120,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
       ggplot2::labs(subtitle = "Similarity scores, forward matching",
            x = "", y = "") +
       ggplot2::theme_bw() +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "s"))
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = "s"))
 
     if (labels %in% c("id", "name")) {
 
@@ -161,7 +161,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
       ggplot2::labs(subtitle = "Similarity scores, backward matching",
            x = "", y = "") +
       ggplot2::theme_bw() +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "s"))
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = "s"))
 
     if (labels %in% c("id", "name")) {
 
@@ -202,7 +202,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
       ggplot2::labs(subtitle = "Similarity scores, forward matching", x = "", y = "") +
       ggplot2::theme_bw() +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "s"))
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = "s"))
 
     p2 <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = geom_1, fill = NA, color = NA) +
@@ -210,7 +210,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
       ggplot2::labs(subtitle = "Similarity scores, backward matching", x = "", y = "") +
       ggplot2::theme_bw() +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "s"))
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = "s"))
 
     if (labels %in% c("id", "name")) {
 

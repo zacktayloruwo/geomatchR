@@ -9,7 +9,7 @@
 #' @param name1 The unique polygon identification name of the first polygon sf object
 #' @param name2 The unique polygon identification name of the second polygon sf object
 #' @param table An object of class list created by `gm_crossmatch()`
-#' @param label.cutoff Minimum similarity score of polygons to label. Defaults to 0.8
+#' @param label.range Vector of minimum and maximum similarity scores to label. Defaults to c(0.8, 1)
 #' @param labels "id" to show polygon identifiers defined by id1 and id2;
 #'   "name" to show polygon names defined by name1 and name2;
 #'   "none" to suppress polygon labels. Defaults to "none".
@@ -69,13 +69,13 @@
 #'                   name1 = "geoname1",
 #'                   name2 = "geoname2",
 #'                   table = result,
-#'                   label.cutoff = .5,
+#'                   label.range = c(.5, 1),
 #'                   labels = "name",
 #'                   plot = "combined"
 #' )
 
 gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
-                              label.cutoff = .8, labels = "none",
+                              label.range = c(.8, 1), labels = "none",
                               plot = "combined") {
 
   `%notin%` <- Negate(`%in%`)
@@ -110,7 +110,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = g, ggplot2::aes(fill = similarity_area), colour = "#000000", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      ggplot2::labs(title = "Similarity scores, forward matching",
+      ggplot2::labs(subtitle = "Similarity scores, forward matching",
            x = "", y = "") +
       ggplot2::theme_bw()
 
@@ -120,8 +120,8 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(g |> dplyr::filter(.data$similarity_area < label.cutoff))) +
-        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+        ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 
     return(p)
@@ -150,7 +150,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = g, ggplot2::aes(fill = .data$similarity_area), colour = "#000000", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      ggplot2::labs(title = "Similarity scores, backward matching",
+      ggplot2::labs(subtitle = "Similarity scores, backward matching",
            x = "", y = "") +
       ggplot2::theme_bw()
 
@@ -160,8 +160,8 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(g |> dplyr::filter(.data$similarity_area < label.cutoff))) +
-        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+        ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 
     return(p)
@@ -191,14 +191,14 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
       ggplot2::geom_sf(data = geom_2, fill = NA, color = NA) +
       ggplot2::geom_sf(data = geom_1, ggplot2::aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      ggplot2::labs(title = "Similarity scores, forward matching", x = "", y = "") +
+      ggplot2::labs(subtitle = "Similarity scores, forward matching", x = "", y = "") +
       ggplot2::theme_bw()
 
     p2 <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = geom_1, fill = NA, color = NA) +
       ggplot2::geom_sf(data = geom_2, ggplot2::aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      ggplot2::labs(title = "Similarity scores, backward matching", x = "", y = "") +
+      ggplot2::labs(subtitle = "Similarity scores, backward matching", x = "", y = "") +
       ggplot2::theme_bw()
 
     if (labels %in% c("id", "name")) {
@@ -207,15 +207,15 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                            size = s, color = "red", stat = "sf_coordinates",
                                            min.segment.length = 0, segment.color = "red",
                                            max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                           data = sf::st_centroid(geom_1 |> dplyr::filter(.data$similarity_area >= label.cutoff))) +
-        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+                                           data = sf::st_centroid(geom1 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+        ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
 
       p2 <- p2 + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(geom_2 |> dplyr::filter(.data$similarity_area >= label.cutoff))) +
-        ggplot2::labs(caption = paste0("Label display cut-off: < ", label.cutoff))
+                                         data = sf::st_centroid(geom2 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+        ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 
     p <- ggpubr::ggarrange(p1, p2, ncol = 1, legend = "bottom", common.legend = TRUE, align ="hv")

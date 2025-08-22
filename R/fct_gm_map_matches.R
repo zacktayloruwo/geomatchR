@@ -127,7 +127,8 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
       ggplot2::labs(subtitle = paste0("Matches for polygon '", polygon, "'"),
                     caption = paste0("Minimum similarity score mapped: ", minimum),
                     x = "", y = "") +
-      ggplot2::theme_bw()
+      ggplot2::theme_bw() +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = "s"))
 
     if(context == TRUE) {
       p <- p +

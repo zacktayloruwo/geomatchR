@@ -78,6 +78,11 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                               label.range = c(.8, 1), labels = "none",
                               plot = "combined") {
 
+  if (length(label.range) != 2 & labels != "none") {
+    stop("Your label range does not have two elements.")
+  }
+
+  message(paste0("Making ", plot, " plot."))
   message(paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
 
   `%notin%` <- Negate(`%in%`)
@@ -122,7 +127,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range[1], label.range[2])))) +
         ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 
@@ -162,7 +167,7 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+                                         data = sf::st_centroid(g |> dplyr::filter(dplyr::between(.data$similarity_area, label.range[1], label.range[2])))) +
         ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 
@@ -209,14 +214,14 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                                            size = s, color = "red", stat = "sf_coordinates",
                                            min.segment.length = 0, segment.color = "red",
                                            max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                           data = sf::st_centroid(geom1 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+                                           data = sf::st_centroid(geom_1 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range[1], label.range[2])))) +
         ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
 
       p2 <- p2 + ggrepel::geom_label_repel(ggplot2::aes(label = paste0(!!rlang::sym(labels), "\n", round(similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "red", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "red",
                                          max.overlaps = Inf, alpha = a, seed = 519, force = f,
-                                         data = sf::st_centroid(geom2 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range)))) +
+                                         data = sf::st_centroid(geom_2 |> dplyr::filter(dplyr::between(.data$similarity_area, label.range[1], label.range[2])))) +
         ggplot2::labs(caption = paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
     }
 

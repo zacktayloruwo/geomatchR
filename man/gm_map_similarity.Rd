@@ -12,7 +12,7 @@ gm_map_similarity(
   name1,
   name2,
   table,
-  label.cutoff = 0.8,
+  label.range = c(0.8, 1),
   labels = "none",
   plot = "combined"
 )
@@ -32,7 +32,7 @@ gm_map_similarity(
 
 \item{table}{An object of class list created by `gm_crossmatch()`}
 
-\item{label.cutoff}{Minimum similarity score of polygons to label. Defaults to 0.8}
+\item{label.range}{Vector of minimum and maximum similarity scores to label. Defaults to c(0.8, 1)}
 
 \item{labels}{"id" to show polygon identifiers defined by id1 and id2;
 "name" to show polygon names defined by name1 and name2;
@@ -92,7 +92,7 @@ gm_map_similarity(geom1 = sf1,
                   name1 = "geoname1",
                   name2 = "geoname2",
                   table = result,
-                  label.cutoff = .5,
+                  label.range = c(.5, 1),
                   labels = "name",
                   plot = "combined"
 )

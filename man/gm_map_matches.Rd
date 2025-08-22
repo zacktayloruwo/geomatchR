@@ -13,7 +13,8 @@ gm_map_matches(
   name1,
   name2,
   table,
-  context = TRUE
+  context = TRUE,
+  minimum = 0.05
 )
 }
 \arguments{
@@ -33,7 +34,9 @@ gm_map_matches(
 
 \item{table}{An object of class list created by `gm_crossmatch()`}
 
-\item{context}{If TRUE, draws the boundaries of the first polygon sf object as background visual reference}
+\item{context}{If TRUE, draws the boundaries of the first polygon sf object as background visual reference. Defaults to TRUE.}
+
+\item{minimum}{Do not display matches with a similarity score less than value in context.min. Defaults to 0.05.}
 }
 \value{
 Returns a ggplot object
@@ -88,6 +91,7 @@ gm_map_matches(
   name1 = "geoname1",
   name2 = "geoname2",
   table = result,
-  context = TRUE
+  context = TRUE,
+  context.min = .05
 )
 }

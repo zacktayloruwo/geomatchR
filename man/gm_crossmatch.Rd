@@ -19,9 +19,9 @@ gm_crossmatch(geom1, geom2, id1, id2, name1, name2, cutoff = 0.8, clean = TRUE)
 
 \item{name2}{The unique polygon identification name of the second polygon sf object}
 
-\item{cutoff}{Minimal areal similarity cut-off. Defaults to 0.8}
+\item{cutoff}{Minimum areal similarity cut-off. Defaults to 0.8}
 
-\item{clean}{Make TRUE if you want to run `gm_clean()` on the sf objects. Defaults to TRUE}
+\item{clean}{Make TRUE if you want to run `gm_clean()` on the sf objects first. Defaults to TRUE}
 }
 \value{
 Returns a list of tables:
@@ -38,6 +38,30 @@ Returns a list of tables:
    The returned list can be used to cartographically visualize similarity scores using
    the `gm_map_similarity()` and `gm_map_matches()` functions.
 }
+\section{Columns returned in the tables}{
+
+
+* similarity_area = similarity score based on areal overlap. Higher is better.
+* area1 = area of first polygon (km2)
+* area2 = area of matched second polygon (km2)
+* overlap = area of overlap between both polygons (km2)
+* pct_f = percentage overlap, forward comparison
+* pct_b = percentage overlap, backward comparison
+* pct_diff = difference between pct_f and pct_b, divided by 2
+* rank_areal_f = rank order of first polygons (id1) by similarity_area
+* rank_areal_b = rank order of second polygons (id2) by similarity_area
+* gap_f = difference between the similarity score of the top-ranked and second-ranked forward match
+* gap_b = difference between the similarity score of the top-ranked and second-ranked backward match
+* gap_areal_diff = absolute difference between gap_f and gap_b (smaller is better)
+* width1 = maximum width of first polygon
+* width2 = maximum width of matched second polygon
+* distance = distance between the centroids of the matched polygons (m)
+* dist_ratio1 = distance / width1
+* dist_ratio2 = distance / width2
+* rank_dist_f = rank order of first polygons (id1) by distance (lower value means centroids are closer)
+* rank_dist_b = rank order of second polygons (id2) by distance (lower value means centroids are closer)
+}
+
 \examples{
 library(sf)
 

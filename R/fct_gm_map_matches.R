@@ -108,11 +108,11 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
     sf::st_agr(g1) = "constant"
     sf::st_agr(g2) = "constant"
 
-    lim = 0 # min(g2$similarity_area)
+    lim = 0
 
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = g2, ggplot2::aes(fill = .data$similarity_area), colour = "#000000", lwd = lwd * 2) +
-      ggplot2::geom_sf(data = g1, fill = NA, colour = "red", lwd = lwd * 4) +
+      ggplot2::geom_sf(data = g1, fill = NA, colour = "red", linetype = "11", lwd = lwd * 4) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
       ggrepel::geom_label_repel(ggplot2::aes(label = paste0(.data$id, "\n s = ", round(.data$similarity_area,2)), geometry = .data$geometry),
                                          size = s, color = "black", stat = "sf_coordinates",

@@ -78,6 +78,8 @@ gm_map_similarity <- function(geom1, geom2, id1, id2, name1, name2, table,
                               label.range = c(.8, 1), labels = "none",
                               plot = "combined") {
 
+  message(paste0("Labels displayed between ", label.range[1], " and ", label.range[2]))
+
   `%notin%` <- Negate(`%in%`)
 
   lwd = .25

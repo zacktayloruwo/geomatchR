@@ -10,7 +10,8 @@
 #' @param name1 The unique polygon identification name of the first polygon sf object
 #' @param name2 The unique polygon identification name of the second polygon sf object
 #' @param table An object of class list created by `gm_crossmatch()`
-#' @param context If TRUE, draws the boundaries of the first polygon sf object as background visual reference
+#' @param context If TRUE, draws the boundaries of the first polygon sf object as background visual reference. Defaults to TRUE.
+#' @param minimum Do not display matches with a similarity score less than value in context.min. Defaults to 0.05.
 #' @returns Returns a ggplot object
 #' @importFrom rlang sym
 #' @import dplyr
@@ -67,11 +68,12 @@
 #'   name1 = "geoname1",
 #'   name2 = "geoname2",
 #'   table = result,
-#'   context = TRUE
+#'   context = TRUE,
+#'   context.min = .05
 #' )
 
 
-gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table, context = TRUE) {
+gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table, context = TRUE, minimum = .05) {
 
   `%notin%` <- Negate(`%in%`)
 
@@ -95,7 +97,7 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
     g2 <- geom2 |>
       dplyr::rename(id = !!rlang::sym(id2)) |>
       dplyr::right_join(table[['similarity']] |>
-                        dplyr::filter(.data$id1 == polygon) |>
+                        dplyr::filter(.data$id1 == polygon, .data$similarity_area >= minimum) |>
                         dplyr::select(id1, id2, similarity_area),
                 by = dplyr::join_by(id == id2)
                 ) |>
@@ -106,7 +108,7 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
     sf::st_agr(g1) = "constant"
     sf::st_agr(g2) = "constant"
 
-    lim = min(g2$similarity_area)
+    lim = 0 # min(g2$similarity_area)
 
     p <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = g2, ggplot2::aes(fill = .data$similarity_area), colour = "#000000", lwd = lwd * 2) +
@@ -122,7 +124,8 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
                           size = s * 2, color = "red", stat = "sf_coordinates",
                           data = suppressWarnings(sf::st_centroid(g1))
       ) +
-      ggplot2::labs(title = paste0("Matches for polygon '", polygon, "'"),
+      ggplot2::labs(subtitle = paste0("Matches for polygon '", polygon, "'"),
+                    caption = paste0("Minimum similarity score mapped: ", minimum),
                     x = "", y = "") +
       ggplot2::theme_bw()
 

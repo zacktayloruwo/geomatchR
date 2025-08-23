@@ -21,11 +21,13 @@ gm_crossmatch(geom1, geom2, id1, id2, name1, name2, cutoff = 0.8, clean = TRUE)
 
 \item{cutoff}{Minimum areal similarity cut-off. Defaults to 0.8}
 
-\item{clean}{Make TRUE if you want to run `gm_clean()` on the sf objects first. Defaults to TRUE}
+\item{clean}{Make TRUE if you want to run [gm_clean()] on the sf objects first. Defaults to TRUE}
 }
 \value{
-Returns a list of tables:
+The function returns a list of tables:
   \itemize{
+    \item quantiles = a `quantile()` summary of the similarity scores
+    \item histogram = a histogram of the similarity scores with the cutoff indicated
     \item similarity = match scores for all overlapping polygons
     \item top_ranked = top-ranked matches where rank_areal_f and rank_areal_b = 1 and similarity > cutoff
     \item no_match1 = polygons in geom1 without top-ranked matches
@@ -35,34 +37,36 @@ Returns a list of tables:
 \description{
 `gm_crossmatch()` compares polygon sf objects geom1 and geom2 and returns a list
    of tables that help the user assess which polygons are high-probability matches.
-   The returned list can be used to cartographically visualize similarity scores using
-   the `gm_map_similarity()` and `gm_map_matches()` functions.
+   The returned list can be used to cartographically visualize similarity scores (s)
+   using the [gm_map_similarity()] and [gm_map_matches()] functions.
 }
-\section{Columns returned in the tables}{
+\section{Columns returned in tables}{
 
-
-* similarity_area = similarity score based on areal overlap. Higher is better.
-* area1 = area of first polygon (km2)
-* area2 = area of matched second polygon (km2)
-* overlap = area of overlap between both polygons (km2)
-* pct_f = percentage overlap, forward comparison
-* pct_b = percentage overlap, backward comparison
-* pct_diff = difference between pct_f and pct_b, divided by 2
-* rank_areal_f = rank order of first polygons (id1) by similarity_area
-* rank_areal_b = rank order of second polygons (id2) by similarity_area
-* gap_f = difference between the similarity score of the top-ranked and second-ranked forward match
-* gap_b = difference between the similarity score of the top-ranked and second-ranked backward match
-* gap_areal_diff = absolute difference between gap_f and gap_b (smaller is better)
-* width1 = maximum width of first polygon
-* width2 = maximum width of matched second polygon
-* distance = distance between the centroids of the matched polygons (m)
-* dist_ratio1 = distance / width1
-* dist_ratio2 = distance / width2
-* rank_dist_f = rank order of first polygons (id1) by distance (lower value means centroids are closer)
-* rank_dist_b = rank order of second polygons (id2) by distance (lower value means centroids are closer)
+ \itemize{
+    \item s = similarity score based on areal overlap. Higher is better.
+    \item area1 = area of first polygon (km2)
+    \item area2 = area of matched second polygon (km2)
+    \item pct_f = percentage overlap, forward comparison
+    \item pct_b = percentage overlap, backward comparison
+    \item overlap = area of overlap between both polygons (km2)
+    \item pct_diff = difference between pct_f and pct_b, divided by 2
+    \item rank_areal_f = rank order of first polygons (id1) by declining s
+    \item rank_areal_b = rank order of second polygons (id2) by declining s
+    \item gap_f = difference between the similarity score of the top-ranked and second-ranked forward match
+    \item gap_b = difference between the similarity score of the top-ranked and second-ranked backward match
+    \item gap_areal_diff = absolute difference between gap_f and gap_b (smaller is better)
+    \item width1 = maximum width of first polygon
+    \item width2 = maximum width of matched second polygon
+    \item distance = distance between the centroids of the matched polygons (m)
+    \item dist_ratio1 = distance / width1
+    \item dist_ratio2 = distance / width2
+    \item rank_dist_f = rank order of first polygons (id1) by distance (lower value means centroids are closer)
+    \item rank_dist_b = rank order of second polygons (id2) by distance (lower value means centroids are closer)
+}
 }
 
 \examples{
+library(geomatchR)
 library(sf)
 
 # Create example polygon set 1
@@ -101,6 +105,8 @@ result <- gm_crossmatch(
 
 # Inspect outputs
 names(result)
+result$quantiles
+result$histogram
 result$similarity
 result$top_ranked
 result$no_match1

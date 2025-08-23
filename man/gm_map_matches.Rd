@@ -32,19 +32,23 @@ gm_map_matches(
 
 \item{name2}{The unique polygon identification name of the second polygon sf object}
 
-\item{table}{An object of class list created by `gm_crossmatch()`}
+\item{table}{An object of class list created by [gm_crossmatch()]}
 
-\item{context}{If TRUE, draws the boundaries of the first polygon sf object as background visual reference. Defaults to TRUE.}
+\item{context}{If TRUE, draws the boundaries of the first polygon sf object as
+background visual reference. Defaults to TRUE.}
 
-\item{minimum}{Do not display matches with a similarity score less than value in context.min. Defaults to 0.05.}
+\item{minimum}{Do not display matches with a similarity score less than value
+in context.min. Defaults to 0.05.}
 }
 \value{
 Returns a ggplot object
 }
 \description{
-`gm_map_matches()` creates a map of all matches to a single specified polygon.
+`gm_map_matches()` creates a map of all matches to a single specified polygon
+from the results of running [gm_crossmatch()]. The map is a `ggplot()` object.
 }
 \examples{
+library(geomatchR)
 library(sf)
 
 # Create example polygon set 1
@@ -92,6 +96,6 @@ gm_map_matches(
   name2 = "geoname2",
   table = result,
   context = TRUE,
-  context.min = .05
+  minimum = .05
 )
 }

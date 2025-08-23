@@ -1,6 +1,7 @@
 #' Visually represent a single polygon's matches
 #'
-#' `gm_map_matches()` creates a map of all matches to a single specified polygon.
+#' `gm_map_matches()` creates a map of all matches to a single specified polygon
+#' from the results of running [gm_crossmatch()]. The map is a `ggplot()` object.
 #'
 #' @param polygon The identification code of the polygon in geom1 to match
 #' @param geom1 The first polygon sf object
@@ -9,9 +10,11 @@
 #' @param id2 The unique polygon identification code of the second polygon sf object
 #' @param name1 The unique polygon identification name of the first polygon sf object
 #' @param name2 The unique polygon identification name of the second polygon sf object
-#' @param table An object of class list created by `gm_crossmatch()`
-#' @param context If TRUE, draws the boundaries of the first polygon sf object as background visual reference. Defaults to TRUE.
-#' @param minimum Do not display matches with a similarity score less than value in context.min. Defaults to 0.05.
+#' @param table An object of class list created by [gm_crossmatch()]
+#' @param context If TRUE, draws the boundaries of the first polygon sf object as
+#' background visual reference. Defaults to TRUE.
+#' @param minimum Do not display matches with a similarity score less than value
+#' in context.min. Defaults to 0.05.
 #' @returns Returns a ggplot object
 #' @importFrom rlang sym
 #' @import dplyr
@@ -22,6 +25,7 @@
 #' @export
 #'
 #' @examples
+#' library(geomatchR)
 #' library(sf)
 #'
 #' # Create example polygon set 1
@@ -69,7 +73,7 @@
 #'   name2 = "geoname2",
 #'   table = result,
 #'   context = TRUE,
-#'   context.min = .05
+#'   minimum = .05
 #' )
 
 
@@ -78,7 +82,7 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
   `%notin%` <- Negate(`%in%`)
 
   lwd = .25
-  s = 2
+  size = 2
   a = .8
   f = 50
 
@@ -87,7 +91,7 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
   }
 
   # declare variables
-  id <- similarity_area <- NULL
+  id <- s <- NULL
 
   # plot
     g1 <- geom1 |>
@@ -97,11 +101,11 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
     g2 <- geom2 |>
       dplyr::rename(id = !!rlang::sym(id2)) |>
       dplyr::right_join(table[['similarity']] |>
-                        dplyr::filter(.data$id1 == polygon, .data$similarity_area >= minimum) |>
-                        dplyr::select(id1, id2, similarity_area),
+                        dplyr::filter(.data$id1 == polygon, .data$s >= minimum) |>
+                        dplyr::select(id1, id2, s),
                 by = dplyr::join_by(id == id2)
                 ) |>
-      dplyr::arrange(dplyr::desc(.data$similarity_area)) |>
+      dplyr::arrange(dplyr::desc(.data$s)) |>
       dplyr::mutate(rank = dplyr::row_number())
 
     ## suppresses warning during st_centroid()
@@ -111,17 +115,17 @@ gm_map_matches <- function(polygon, geom1, geom2, id1, id2, name1, name2, table,
     lim = 0
 
     p <- ggplot2::ggplot() +
-      ggplot2::geom_sf(data = g2, ggplot2::aes(fill = .data$similarity_area), colour = "grey50", lwd = lwd * 2) +
+      ggplot2::geom_sf(data = g2, ggplot2::aes(fill = .data$s), colour = "grey50", lwd = lwd * 2) +
       ggplot2::geom_sf(data = g1, fill = NA, colour = "red", linetype = "11", lwd = lwd * 4) +
       viridis::scale_fill_viridis(direction = -1, limits = c(lim,1))  +
-      ggrepel::geom_label_repel(ggplot2::aes(label = paste0(.data$id, "\n s = ", round(.data$similarity_area,2)), geometry = .data$geometry),
-                                         size = s, color = "black", stat = "sf_coordinates",
+      ggrepel::geom_label_repel(ggplot2::aes(label = paste0(.data$id, "\n s = ", round(.data$s,2)), geometry = .data$geometry),
+                                         size = size, color = "black", stat = "sf_coordinates",
                                          min.segment.length = 0, segment.color = "black",
                                          max.overlaps = Inf, alpha = a, seed = 519,
                                          force = f, force_pull = -f,
                                          data = suppressWarnings(sf::st_centroid(g2))) +
       ggplot2::geom_label(ggplot2::aes(label = .data$id, geometry = .data$geometry),
-                          size = s * 2, color = "red", stat = "sf_coordinates",
+                          size = size * 2, color = "red", stat = "sf_coordinates",
                           data = suppressWarnings(sf::st_centroid(g1))
       ) +
       ggplot2::labs(subtitle = paste0("Matches for polygon '", polygon, "'"),

@@ -30,7 +30,7 @@ gm_map_similarity(
 
 \item{name2}{The unique polygon identification name of the second polygon sf object}
 
-\item{table}{An object of class list created by `gm_crossmatch()`}
+\item{table}{An object of class list created by [gm_crossmatch()]}
 
 \item{label.range}{Vector of minimum and maximum similarity scores to label. Defaults to c(0.8, 1)}
 
@@ -42,12 +42,14 @@ gm_map_similarity(
 "forward" or "f" to show forward comparison only; "backward" or "b" to show backward comparison only.}
 }
 \value{
-Returns a plot object
+Returns a ggplot object
 }
 \description{
-`gm_map_similarity()` creates a map of similarity scores.
+`gm_map_similarity()` creates a map of similarity scores from the results of running [gm_crossmatch()].
+The map is a `ggplot()` object.
 }
 \examples{
+library(geomatchR)
 library(sf)
 
 # Create example polygon set 1

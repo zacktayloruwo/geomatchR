@@ -295,8 +295,13 @@ gm_crossmatch <- function(geom1, geom2, id1, id2, name1, name2, cutoff = .8, cle
 
   message("Generating quantile summary.")
   # distribution
-  similarity[['quantiles']] <- df |> dplyr::pull(s) |> sort() |> stats::quantile(probs = seq(0, 1, .1),
-                                                                          na.rm = FALSE)
+  q <- df |> dplyr::pull(s) |> sort() |>
+    stats::quantile(probs = seq(0, 1, .1), na.rm = FALSE)
+
+  similarity[['quantiles']] <- tibble(
+      quantile = names(q),
+      value = as.numeric(q)
+    )
 
   message("Generating histogram.")
   # distribution

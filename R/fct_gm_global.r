@@ -2,12 +2,6 @@
 #'
 #' `gm_global()` returns a list of global summary statistics from the output of [gm_crossmatch()].
 #'
-#' @param geom1 The first polygon sf object
-#' @param geom2 The second polygon sf object
-#' @param id1 The unique polygon identification code of the first polygon sf object
-#' @param id2 The unique polygon identification code of the second polygon sf object
-#' @param name1 The unique polygon identification name of the first polygon sf object
-#' @param name2 The unique polygon identification name of the second polygon sf object
 #' @param table An object of class list created by [gm_crossmatch()]
 #' @param cutoff Minimum areal similarity cut-off. Defaults to 0.8
 #' @param top.only Only include top-ranked matches in the quantile table and histogram
@@ -65,12 +59,7 @@
 #' )
 #'
 #' # global summary statistics
-#' global <- gm_global(geom1 = sf1,
-#'   geom2 = sf2,
-#'   id1 = "geoid",
-#'   id2 = "geoid",
-#'   name1 = "geoname1",
-#'   name2 = "geoname2",
+#' global <- gm_global(
 #'   table = result,
 #'   cutoff = 0.5,
 #'   top.only = TRUE
@@ -85,7 +74,7 @@
 #' global$matched_toprank1
 #' global$matched_toprank2
 
-gm_global <- function(geom1, geom2, id1, id2, name1, name2, table, cutoff = 0.8, top.only = TRUE) {
+gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
 
   `%notin%` <- Negate(`%in%`)
   bin = .05

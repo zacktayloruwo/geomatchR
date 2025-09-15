@@ -26,8 +26,6 @@ gm_crossmatch(geom1, geom2, id1, id2, name1, name2, cutoff = 0.8, clean = TRUE)
 \value{
 The function returns a list of tables:
   \itemize{
-    \item quantiles = a `quantile()` summary of the similarity scores
-    \item histogram = a histogram of the similarity scores with the cutoff indicated
     \item similarity = match scores for all overlapping polygons
     \item top_ranked = top-ranked matches where rank_areal_f and rank_areal_b = 1 and similarity > cutoff
     \item no_match1 = polygons in geom1 without top-ranked matches
@@ -105,8 +103,6 @@ result <- gm_crossmatch(
 
 # Inspect outputs
 names(result)
-result$quantiles
-result$histogram
 result$similarity
 result$top_ranked
 result$no_match1

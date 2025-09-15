@@ -2,6 +2,7 @@
 
 export(gm_clean)
 export(gm_crossmatch)
+export(gm_global)
 export(gm_map_matches)
 export(gm_map_similarity)
 import(dplyr)

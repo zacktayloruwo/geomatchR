@@ -171,7 +171,7 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
 
     message(paste0("Proportion of geom1 polygons with top-ranked match: ", summary[['matched_toprank1']]))
     summary[['matched_toprank1']] <- df |>
-      mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1 & .data$s >= cutoff,
+      mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1,
                         TRUE,
                         FALSE)) |>
       group_by(id1) |>
@@ -181,7 +181,7 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
 
     message(paste0("Calculating proportion of geom2 polygons with top-ranked match."))
     summary[['matched_toprank2']] <- df |>
-      mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1 & .data$s >= cutoff,
+      mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1,
                         TRUE,
                         FALSE)) |>
       group_by(id2) |>

@@ -185,4 +185,6 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       ungroup() |>
       summarise(pct = mean(i))
 
+    return(summary)
+
 }

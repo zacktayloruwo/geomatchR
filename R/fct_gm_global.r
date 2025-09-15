@@ -156,16 +156,14 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       group_by(id1) |>
         summarise(s = max(s)) |>
       ungroup() |>
-      pull(s) |>
-      mean(. >= cutoff)
+      summarise(pct = mean(s >= cutoff))
 
     message(paste0("Calculating proportion of geom2 polygons with a match with s >= ", cutoff))
     summary[['matched_cutoff2']] <- df |>
       group_by(id2) |>
         summarise(s = max(s)) |>
       ungroup() |>
-      pull(s) |>
-      mean(. >= cutoff)
+      summarise(pct = mean(s >= cutoff))
 
     message(paste0("Calculating proportion of geom1 polygons with top-ranked match."))
     summary[['matched_toprank1']] <- df |>
@@ -175,8 +173,7 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       group_by(id1) |>
         summarise(i = max(i)) |>
       ungroup() |>
-      pull(i) |>
-      mean(.)
+      summarise(pct = mean(i))
 
     message(paste0("Calculating proportion of geom2 polygons with top-ranked match."))
     summary[['matched_toprank2']] <- df |>
@@ -186,7 +183,6 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       group_by(id2) |>
       summarise(i = max(i)) |>
       ungroup() |>
-      pull(i) |>
-      mean(.)
+      summarise(pct = mean(i))
 
 }

@@ -15,8 +15,6 @@
 #' @param clean Make TRUE if you want to run [gm_clean()] on the sf objects first. Defaults to TRUE
 #' @returns The function returns a list of tables:
 #'   \itemize{
-#'     \item quantiles = a `quantile()` summary of the similarity scores
-#'     \item histogram = a histogram of the similarity scores with the cutoff indicated
 #'     \item similarity = match scores for all overlapping polygons
 #'     \item top_ranked = top-ranked matches where rank_areal_f and rank_areal_b = 1 and similarity > cutoff
 #'     \item no_match1 = polygons in geom1 without top-ranked matches
@@ -47,7 +45,6 @@
 #'
 #' @importFrom rlang sym
 #' @importFrom stats dist quantile
-#' @import ggplot2
 #' @import dplyr
 #' @import sf
 #' @import units
@@ -95,8 +92,6 @@
 #'
 #' # Inspect outputs
 #' names(result)
-#' result$quantiles
-#' result$histogram
 #' result$similarity
 #' result$top_ranked
 #' result$no_match1
@@ -105,7 +100,6 @@
 gm_crossmatch <- function(geom1, geom2, id1, id2, name1, name2, cutoff = .8, clean = TRUE){
 
   `%notin%` <- Negate(`%in%`)
-  bin = .05
 
   # declare variables
   overlap <- pct_f <- pct_b <- NULL
@@ -292,34 +286,6 @@ gm_crossmatch <- function(geom1, geom2, id1, id2, name1, name2, cutoff = .8, cle
     dplyr::left_join(dist_matrix, by = c("id1", "id2")) |>
     dplyr::mutate(dist_ratio1 = .data$distance / .data$width1) |>
     dplyr::mutate(dist_ratio2 = .data$distance / .data$width2)
-
-  message("Generating quantile summary.")
-  # distribution
-  q <- df |> dplyr::pull(s) |> sort() |>
-    stats::quantile(probs = seq(0, 1, .1), na.rm = FALSE)
-
-  similarity[['quantiles']] <- tibble::tibble(
-      quantile = names(q),
-      value = as.numeric(q)
-    )
-
-  message("Generating histogram.")
-  # distribution
-  similarity[['histogram']] <- df |>
-    ggplot(aes(s)) +
-    geom_histogram(binwidth = bin, fill = "grey30", color = "white", lwd = .25, boundary = 0) +
-    geom_vline(xintercept = cutoff, color = "red", linetype = "11") +
-    scale_x_continuous(breaks = seq(0, 1, 0.05)) +
-    labs(
-      subtitle = "Histogram of similarity scores",
-      caption = paste0("Cutoff = ", cutoff, ". Bin width = ", bin)
-    ) +
-    theme_bw() +
-    theme(
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
-      axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
-    )
 
   similarity[['similarity']] <- df
 

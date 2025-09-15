@@ -138,7 +138,9 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       ggplot(aes(s)) +
       geom_histogram(binwidth = bin, fill = "grey30", color = "white", lwd = .25, boundary = 0) +
       geom_vline(xintercept = cutoff, color = "red", linetype = "11") +
-      scale_x_continuous(breaks = seq(0, 1, 0.05)) +
+      scale_x_continuous(breaks = seq(0, 1, 0.05),
+                         limits = c(0, 1)
+                         ) +
       labs(
         subtitle = "Histogram of similarity scores, top-ranked ",
         caption = paste0("Cutoff = ", cutoff, ". Bin width = ", bin)
@@ -151,21 +153,23 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       )
   }
 
-    message(paste0("Calculating proportion of geom1 polygons with a match with s >= ", cutoff))
     summary[['matched_cutoff1']] <- df |>
       group_by(id1) |>
         summarise(s = max(s)) |>
       ungroup() |>
       summarise(pct = mean(s >= cutoff))
+    message(paste0("Proportion of geom1 polygons with a match with s >= ", cutoff, ": ",
+                   summary[['matched_cutoff1']] |> pull()))
 
-    message(paste0("Calculating proportion of geom2 polygons with a match with s >= ", cutoff))
     summary[['matched_cutoff2']] <- df |>
       group_by(id2) |>
         summarise(s = max(s)) |>
       ungroup() |>
       summarise(pct = mean(s >= cutoff))
+    message(paste0("Proportion of geom2 polygons with a match with s >= ", cutoff, ": ",
+                   summary[['matched_cutoff2']] |> pull()))
 
-    message(paste0("Calculating proportion of geom1 polygons with top-ranked match."))
+    message(paste0("Proportion of geom1 polygons with top-ranked match: ", summary[['matched_toprank1']]))
     summary[['matched_toprank1']] <- df |>
       mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1 & .data$s >= cutoff,
                         TRUE,

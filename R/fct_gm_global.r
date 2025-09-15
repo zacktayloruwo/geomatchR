@@ -159,7 +159,7 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       ungroup() |>
       summarise(pct = mean(s >= cutoff))
     message(paste0("Proportion of geom1 polygons with a match with s >= ", cutoff, ": ",
-                   summary[['matched_cutoff1']] |> pull()))
+                   summary[['matched_cutoff1']] |> pull() |> round(digits = 2)))
 
     summary[['matched_cutoff2']] <- df |>
       group_by(id2) |>
@@ -167,9 +167,8 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       ungroup() |>
       summarise(pct = mean(s >= cutoff))
     message(paste0("Proportion of geom2 polygons with a match with s >= ", cutoff, ": ",
-                   summary[['matched_cutoff2']] |> pull()))
+                   summary[['matched_cutoff2']] |> pull() |> round(digits = 2)))
 
-    message(paste0("Proportion of geom1 polygons with top-ranked match: ", summary[['matched_toprank1']]))
     summary[['matched_toprank1']] <- df |>
       mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1,
                         TRUE,
@@ -178,8 +177,9 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
         summarise(i = max(i)) |>
       ungroup() |>
       summarise(pct = mean(i))
+    message(paste0("Proportion of geom1 polygons with top-ranked match: ",
+                   summary[['matched_toprank1']] |> pull() |> round(digits = 2)))
 
-    message(paste0("Calculating proportion of geom2 polygons with top-ranked match."))
     summary[['matched_toprank2']] <- df |>
       mutate(i = ifelse(.data$rank_areal_f == 1 & .data$rank_areal_b == 1,
                         TRUE,
@@ -188,6 +188,8 @@ gm_global <- function(table, cutoff = 0.8, top.only = TRUE) {
       summarise(i = max(i)) |>
       ungroup() |>
       summarise(pct = mean(i))
+    message(paste0("Proportion of geom2 polygons with top-ranked match: ",
+                   summary[['matched_toprank2']] |> pull() |> round(digits = 2)))
 
     return(summary)
 
